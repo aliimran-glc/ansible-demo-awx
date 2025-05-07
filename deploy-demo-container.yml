@@ -1,0 +1,67 @@
+---
+- name: Install Docker and run demo container
+  hosts: '{{hostname}}'
+  become: yes
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker Engine
+      apt:
+        name: docker-ce
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull demo Docker image
+      docker_image:
+        name: yeasy/simple-web
+        tag: latest
+        source: pull
+
+    - name: Run demo container
+      docker_container:
+        name: demo_web
+        image: yeasy/simple-web:latest
+        ports:
+          - "80:80"
+        state: started
+        restart_policy: always
+
+    - name: Get IP address of host
+      command: hostname -I
+      register: host_ip_raw
+
+    - name: Print access URL
+      debug:
+        msg: "Access the demo web app at: http://{{ host_ip_raw.stdout.split()[0] }}/"
+
