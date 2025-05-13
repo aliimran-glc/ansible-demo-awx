@@ -1,6 +1,6 @@
 ---
 - name: Install Docker and run demo container
-  hosts: '{{hostname}}'
+  hosts: all
   become: yes
   vars:
     default_container_image: yeasy/simple-web:latest
