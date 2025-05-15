@@ -3,7 +3,8 @@
   hosts: all
   become: yes
   vars:
-    default_container_image: yeasy/simple-web:latest
+    default_container_image: 10.66.41.133:5000/vision-sensus-emul:5.2.2.5-3.9.6.9
+
     
   tasks:
     - set_fact:
@@ -49,15 +50,15 @@
       pip:
         name: docker
 
-    - name: Pull default Docker image
-      community.docker.docker_image:
-        name: "{{ default_container_image }}"
-        source: pull
+    #- name: Pull default Docker image
+    #  community.docker.docker_image:
+    #    name: "{{ default_container_image }}"
+    #    source: pull
 
     - name: Create default containers
       community.docker.docker_container:
-        name: demo_web
-        image: yeasy/simple-web:latest
+        name: demo_emulator
+        image: "{{ default_container_image }}"
         ports:
-          - "8000:80"
+          - "8400:8400"
         state: started
