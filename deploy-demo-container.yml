@@ -59,5 +59,5 @@
         name: demo_web
         image: yeasy/simple-web:latest
         ports:
-          - "80:80"
+          - "8000:80"
         state: started
