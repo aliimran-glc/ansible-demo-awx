@@ -1,6 +1,9 @@
 ---
 - name: Install Docker and run demo container
   hosts: all
+  tasks:
+    - set_fact:
+        ansible_python_interpreter: "/usr/bin/python3"
   become: yes
   vars:
     default_container_image: yeasy/simple-web:latest
