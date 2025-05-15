@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   vars:
-    default_container_image: 10.66.41.133:5000/vision-sensus-emul:5.2.2.5-3.9.6.9
+    default_container_image: 10.66.41.133:5000/starling-sensus-emul:5.5.0.0.GA
 
     
   tasks:
